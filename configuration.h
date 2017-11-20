@@ -26,15 +26,18 @@ struct ModelParameters
 {
 	/////
 	double expTime;
+	unsigned bindseed;
 	//Global paramters
 	double T ;					//temperature
 	double kT;
 
 	//Parameters of potential
-	double G ;					// (* kT | Depth of the potential *)
+	double G ;					// (* kT | Depth of the diffusion potential *)
+	double Gtot;               // (* kT | Depth of the total diffusion+unbinding potential *)
 	double L ;					//(* um | period of the periodic potential *)
 	double sigma;			//(* um | width of the binding well *)
-
+	double unbindsigmathreshold;
+	double MAPKon; //(* binding rate in s-1*)
 									//Parameters of diffusion
 	double DMol ;					//(* um^2/s | free diffusion coefficient of the protein in water *)
 	double DBeadL;					// (* um^2/s | free diffusion coefficient of 0.5 um bead in water *)
@@ -84,6 +87,8 @@ struct ModelParameters
 struct SystemState
 {
 	double xMol;
+	double xMolY=0.0;
+
 	double xMT;
 	double xBeadl;
 	double xBeadr;
@@ -92,9 +97,12 @@ struct SystemState
 	double Time=0.0;
 	double direction = 1.0;
 
+	double bindingState = 0.0;
+
 	template <typename F>
 	static void iterateFields(F&& f) {
 		f(&SystemState::xMol, "xMol");
+		f(&SystemState::xMolY, "xMolY");
 		f(&SystemState::xMT, "xMT");
 		f(&SystemState::xBeadl, "xBeadl");
 		f(&SystemState::xBeadr, "xBeadr");
@@ -103,6 +111,7 @@ struct SystemState
 		f(&SystemState::xTrapr, "xTrapr");
 		f(&SystemState::Time, "Time");
 		f(&SystemState::direction, "direction");
+		f(&SystemState::bindingState, "bindingState");
 	}
 };
 

@@ -38,6 +38,11 @@ Configuration assign_config_from_json(Configuration conf, json jsonobj) {
 		conf.modelParameters.expTime = stod(jsonobj["ModelParameters"]["expTime"].get<std::string>());
 			
 	}
+	if (!(jsonobj["ModelParameters"]["bindseed"].empty())) {
+		conf.modelParameters.bindseed = stoul(jsonobj["ModelParameters"]["bindseed"].get<std::string>());
+
+	}
+	
 	if (!(jsonobj["ModelParameters"]["T"].empty())) {
 		conf.modelParameters.T= stod(jsonobj["ModelParameters"]["T"].get<std::string>());
 		conf.modelParameters.kT = kBoltz*conf.modelParameters.T;
@@ -45,12 +50,23 @@ Configuration assign_config_from_json(Configuration conf, json jsonobj) {
 	if (!(jsonobj["ModelParameters"]["Gdepth"].empty())) {
 		conf.modelParameters.G = (conf.modelParameters.kT)*stod(jsonobj["ModelParameters"]["Gdepth"].get<std::string>());
 	}
+	if (!(jsonobj["ModelParameters"]["Gtotal"].empty())) {
+		conf.modelParameters.Gtot = (conf.modelParameters.kT)*stod(jsonobj["ModelParameters"]["Gtotal"].get<std::string>());
+	}
 	if (!(jsonobj["ModelParameters"]["L"].empty())) {
 		conf.modelParameters.L = stod(jsonobj["ModelParameters"]["L"].get<std::string>());
 	}
 	if (!(jsonobj["ModelParameters"]["sigma"].empty())) {
 		conf.modelParameters.sigma = stod(jsonobj["ModelParameters"]["sigma"].get<std::string>());
 	}
+	if (!(jsonobj["ModelParameters"]["unbindsigmathreshold"].empty())) {
+		conf.modelParameters.unbindsigmathreshold = stod(jsonobj["ModelParameters"]["unbindsigmathreshold"].get<std::string>());
+	}
+	
+	if (!(jsonobj["ModelParameters"]["MAPKon"].empty())) {
+		conf.modelParameters.MAPKon = stod(jsonobj["ModelParameters"]["MAPKon"].get<std::string>());
+	}
+	
 	if (!(jsonobj["ModelParameters"]["gammaMol"].empty())) {
 		conf.modelParameters.gammaMol = stod(jsonobj["ModelParameters"]["gammaMol"].get<std::string>());
 		conf.modelParameters.DMol = conf.modelParameters.kT / stod(jsonobj["ModelParameters"]["gammaMol"].get<std::string>());
@@ -200,6 +216,10 @@ Configuration assign_config_from_json(Configuration conf, json jsonobj) {
 	}
 	if (!(jsonobj["InitialConditions"]["xBeadr"].empty())) {
 		conf.currentState.xBeadr = stod(jsonobj["InitialConditions"]["xBeadr"].get<std::string>());
+	}
+	if (!(jsonobj["ModelParameters"]["inititalBindState"].empty())) {
+		conf.currentState.bindingState = stod(jsonobj["ModelParameters"]["inititalBindState"].get<std::string>());
+		conf.initialConditions.initialState.bindingState = stod(jsonobj["ModelParameters"]["inititalBindState"].get<std::string>());
 	}
 	////
 	return conf;
